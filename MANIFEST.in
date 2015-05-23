@@ -1,0 +1,5 @@
+include CHANGES.rst
+include README.rst
+include stevetags/files.json
+recursive-include stevetags *.jinja2 *.js *.css *.eot *.svg *.ttf *.woff *.woff2 *.otf *.html *.png
+prune stevetags/static

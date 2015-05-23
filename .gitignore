@@ -55,3 +55,11 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Custom
+*.sw[po]
+.ropeproject
+gen
+files.json
+stevetags_env
+lib

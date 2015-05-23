@@ -1,0 +1,8 @@
+pylint==1.1.0
+pep8
+autopep8
+tox
+waitress
+nose
+coverage
+fabric

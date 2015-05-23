@@ -1,0 +1,20 @@
+<div ng-controller="TreeCtrl" class="tree-node">
+  <span class="toggle" ng-click="toggle()"
+    qb-visible="root.children == null || root.children.length > 0">
+    <i class="fa fa-fw fa-lg" ng-class="root.$expanded ? 'fa-caret-down' : 'fa-caret-right'"></i>
+  </span>
+  <span class="selector" ng-click="selectToggle()">
+    <i class="fa fa-fw fa-lg" ng-class="getBoxClass()"></i>
+  </span>
+  <span class="node-name">
+    {{ root.path | basename }}
+  </span>
+  <ul class="list-unstyled subtree" ng-if="root.$expanded">
+    <li ng-show="loading">
+      <i class="fa fa-spinner fa-spin"></i>
+    </li>
+    <li ng-repeat="root in root.children">
+      <div ng-include="URL_PREFIX + '/app/tree/tree.html'"></div>
+    </li>
+  </ul>
+</div>

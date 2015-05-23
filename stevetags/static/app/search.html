@@ -1,0 +1,13 @@
+<div class="qb-search">
+  <form role="form" ng-submit="search(searchtext)">
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-fw fa-lg" ng-class="searching ? 'fa-spinner fa-spin' : 'fa-search'"></i></span>
+        <input class="form-control" type="text" placeholder="Search for files" ng-model="searchtext"
+          qb-focus="true" />
+      </div>
+    </div>
+  </form>
+  <div qb-list="results"></div>
+</div>

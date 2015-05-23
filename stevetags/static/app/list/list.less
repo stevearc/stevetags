@@ -1,0 +1,46 @@
+.file-list {
+  .file {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    border-bottom: solid 1px #ddd;
+    opacity: 1;
+
+    &.removed {
+      opacity: 0;
+      transition: opacity ease-in 1.2s;
+    }
+
+    &:hover {
+      background: #eee;
+    }
+
+    .check {
+      flex: 0 1;
+      min-width: 30px;
+      color: blue;
+      cursor: pointer;
+      .fa {
+        margin-top: 14px;
+        margin-left: 5px;
+      }
+    }
+
+    .content {
+      flex: 1 0;
+
+      .form-group {
+        margin-bottom: 0px;
+      }
+      a {
+        text-decoration: inherit;
+      }
+      .dir {
+        color: #aaa;
+      }
+      .tags {
+        color: #aaa;
+      }
+    }
+  }
+}

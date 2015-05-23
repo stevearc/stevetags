@@ -1,0 +1,29 @@
+<div>
+  <div class="row">
+    <div class="col-xs-6" style="margin-top: 34px">
+      <p class="input-group">
+        <input type="text" class="form-control" datepicker-popup="yyyy MMM d" ng-model="startDate" is-open="open.startDate" min-date="'{{ today }}'" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open($event, 'startDate')"><i class="fa fa-calendar"></i></button>
+        </span>
+      </p>
+    </div>
+    <div class="col-xs-6">
+      <timepicker ng-model="startTime" minute-step="30"></timepicker>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6" style="margin-top: 34px">
+      <p class="input-group">
+        <input type="text" class="form-control" datepicker-popup="yyyy MMM d" ng-model="endDate" is-open="open.endDate" min-date="startDate" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open($event, 'endDate')"><i class="fa fa-calendar"></i></button>
+        </span>
+      </p>
+    </div>
+    <div class="col-xs-6">
+      <timepicker ng-model="endTime" minute-step="30"></timepicker>
+    </div>
+  </div>
+</div>

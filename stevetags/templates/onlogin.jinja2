@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Steve Tags</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  {% for url in request.assets('lib.css') -%}
+    <link rel="stylesheet" type="text/css" href="{{ url }}">
+  {% endfor -%}
+  {% for url in request.assets('app.less') -%}
+    <link rel="stylesheet" type="text/css" href="{{ url }}">
+  {% endfor %}
+</head>
+<body>
+
+<div class="container">
+  <div>
+    You are logged in! You can close this window now.
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  var error = {{ error | json | safe }};
+  var user = {{ user | json | safe }};
+  if (window.parent == null) {
+    window.location = '/';
+  } else {
+    if (window.opener != null) {
+      window.opener.loginCallback(error, user);
+    }
+    window.close();
+  }
+</script>
+</body>
+</html>

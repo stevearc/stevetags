@@ -1,0 +1,33 @@
+<div class="file-list">
+  <ul class="list-unstyled">
+    <li ng-repeat="file in files" class="file" ng-mouseenter="hover = true"
+      ng-mouseleave="hover = false" ng-class="file.$removed ? 'removed' : ''">
+      <div ng-show="removable" class="check" ng-click="toggleRemove(file)">
+        <i class="fa fa-lg" ng-class="file.$removed ? 'fa-check-square-o' : 'fa-square-o'"></i>
+      </div>
+      <div class="content">
+        <div>
+          {{ file.path | basename }}
+          <a ng-href="https://www.dropbox.com/{{ box }}{{ file.path | dirname }}?preview={{ file.path | basename }}"
+            target="_blank" qb-visible="hover">
+            <i class="fa fa-external-link"></i>
+          </a>
+          <span class="dir">
+          {{ file.path | dirname }}
+          </span>
+          <span class="pull-right">{{ file.modified | calendar }}</span>
+        </div>
+        <div class="tags">
+          <div ng-hide="file.$editing" ng-click="editTags(file)" class="clickable">
+            <span ng-if="file.tags.length == 0">Enter tags here</span>
+            {{ file.tags }}
+          </div>
+          <form role="form" class="form-group" ng-if="file.$editing" ng-submit="saveTags(file)">
+            <input type="text" placeholder="Enter tags here" class="form-control" maxlength=100
+              ng-model="file.tags" ng-blur="saveTags(file)" qb-focus="file.$editing" />
+          </form>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

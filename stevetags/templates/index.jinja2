@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html id="ng-app" ng-app="stevetags">
+<head>
+  <title>Steve Tags</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  {% for url in request.assets('lib.css') -%}
+    <link rel="stylesheet" type="text/css" href="{{ url }}">
+  {% endfor -%}
+  {% for url in request.assets('app.less') -%}
+    <link rel="stylesheet" type="text/css" href="{{ url }}">
+  {% endfor %}
+</head>
+<body constants="{{ request.client_constants() | json }}">
+
+<div class="container">
+  <div qb-navbar></div>
+  <div qb-toaster></div>
+  <div ng-view></div>
+</div>
+
+{% for url in request.assets('lib.js') -%}
+  <script type="text/javascript" src="{{ url }}"></script>
+{% endfor -%}
+{% for url in request.assets('app.js') -%}
+  <script type="text/javascript" src="{{ url }}"></script>
+{% endfor %}
+</body>
+</html>

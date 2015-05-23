@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-xs-12">
+    <form class="form-horizontal" role="form">
+      <!-- BOX NAME -->
+      <div class="form-group">
+        <!-- TODO: need an info tooltip -->
+        <label class="control-label col-md-offset-4 col-md-2 col-xs-6">Box name:</label>
+        <div class="col-md-2 col-xs-6">
+          <input class="form-control" type="text" ng-model="USER.settings.box">
+        </div>
+        <div class="hidden-xs hidden-sm col-md-offset-2 col-md-2 text-right">
+          <button ng-show="dirty" ng-click="saveSettings()" class="btn btn-success"
+            ng-disabled="saving">
+            <i ng-show="saving" class="fa fa-spinner fa-spin"></i>
+            Save
+          </button>
+        </div>
+      </div>
+
+      <!-- FILE TYPES -->
+      <div class="form-group">
+        <label class="control-label col-md-offset-4 col-md-2 col-xs-6">File types:</label>
+        <div class="col-md-2 col-xs-6">
+          TODO
+        </div>
+      </div>
+
+      <!-- ROOTS -->
+      <div class="form-group">
+        <label class="control-label col-md-offset-4 col-md-2 col-xs-6">Folders:</label>
+        <div class="col-xs-6">
+          <div ng-include="URL_PREFIX + '/app/tree/tree.html'"></div>
+        </div>
+      </div>
+
+      <div class="form-group vspace40">
+        <div class="col-md-offset-6 col-md-2 col-xs-offset-6 col-xs-6">
+          <button ng-click="deleteAccount()" class="btn btn-sm btn-danger">Delete account</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

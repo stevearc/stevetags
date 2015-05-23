@@ -1,0 +1,30 @@
+upstream stevetags {
+    server 127.0.0.1:{{ uwsgi.port }};
+}
+
+server {
+    listen 80;
+    server_name www.stevetags.com;
+
+    rewrite ^ https://$server_name$request_uri? permanent;
+}
+
+server {
+    listen 443;
+    server_name www.stevetags.com;
+    location /gen {
+        alias /var/nginx/stevetags/;
+        expires 1y;
+    }
+
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/www.stevetags.com.pem;
+    ssl_certificate_key /etc/nginx/ssl/www.stevetags.com.key.nopass;
+    client_max_body_size 2m;
+
+    location / {
+        uwsgi_pass stevetags;
+        uwsgi_param UWSGI_SCHEME $scheme;
+        include uwsgi_params;
+    }
+}
