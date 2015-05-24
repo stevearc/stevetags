@@ -25,7 +25,9 @@ angular.module('stevetags')
     CONST.USER.settings = oldSettings
 
   $scope.saveSettings = ->
-    # TODO: warn if no roots
+    if CONST.USER.settings.roots.length == 0
+      alert("You must select at least one folder")
+      return
     $scope.saving = true
     $http.post('/user/settings', settings: CONST.USER.settings).then ->
       oldSettings = angular.copy CONST.USER.settings
@@ -35,5 +37,9 @@ angular.module('stevetags')
       $scope.saving = false
 
   $scope.deleteAccount = ->
-    alert("TODO: this isn't implemented yet")
+    carryOn = confirm("Are you sure you want to delete your account?")
+    if carryOn
+      $http.get('/user/delete').then ->
+        window.location.reload()
+
 ])

@@ -176,6 +176,7 @@ class User(Base):
             'display_name': self.display_name,
             'familiar_name': self.familiar_name,
             'settings': self.settings,
+            '_mime_types': MIME_TYPES.keys(),
         }
         return data
 

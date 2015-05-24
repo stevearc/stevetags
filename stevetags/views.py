@@ -9,6 +9,7 @@ from pyramid.security import NO_PERMISSION_REQUIRED
 from pyramid.settings import asbool
 from pyramid.view import view_config
 from .models import User, File, Directory, User, UserSettings, MIME_TYPES
+from sqlalchemy import not_
 
 
 LOG = logging.getLogger(__name__)
@@ -28,18 +29,29 @@ def index_view(request):
         'prefix': '/' + prefix,
     }
 
+
 @view_config(route_name='user', renderer='json')
 def get_user(request):
     return {
         'user': request.user
     }
 
+
 @view_config(route_name='user_settings')
 @argify(settings=dict)
 def set_user_settings(request, settings):
+    if set(settings['roots']) != request.user.settings.roots:
+        query = request.db.query(File).filter_by(ownerid=request.authenticated_userid)
+        q2 = request.db.query(Directory).filter_by(ownerid=request.authenticated_userid)
+        for root in settings['roots']:
+            query = query.filter(not_(File.path.like(root + '%')))
+            q2 = q2.filter(not_(Directory.path.like(root + '%')))
+        query.delete(synchronize_session=False)
+        q2.delete(synchronize_session=False)
     for key, value in settings.iteritems():
         setattr(request.user.settings, key, value)
     return request.response
+
 
 @view_config(route_name='files', renderer='json')
 def list_files(request):
@@ -54,9 +66,10 @@ def _walk(request, metadata):
     if metadata['is_dir']:
         path = metadata['path']
         if 'contents' not in metadata:
-            # TODO: (stevearc 2015-05-21) increase file limit
             metadata = request.dropbox.metadata(path)
-        f = request.db.query(Directory).filter_by(ownerid=request.authenticated_userid, path=path).first()
+        f = request.db.query(Directory).filter_by(
+            ownerid=request.authenticated_userid,
+            path=path).first()
         hash = metadata['hash']
         if f is not None:
             if f.hash == hash:
@@ -73,6 +86,10 @@ def _walk(request, metadata):
         modified = parse(metadata['modified'])
         path = metadata['path']
         mime_type = metadata.get('mime_type')
+        if mime_type is not None and len(request.user.settings.filetypes) > 0:
+            if not any((MIME_TYPES[ft](mime_type) for ft in
+                        request.user.settings.filetypes)):
+                return
         f = File(request.authenticated_userid, path, modified, mime_type)
     request.db.merge(f)
 
@@ -96,7 +113,6 @@ def get_children(request, path):
 @view_config(route_name='refresh', renderer='json')
 def refresh_files(request):
     for root in request.user.settings.roots:
-        # TODO: (stevearc 2015-05-21) increase file limit
         metadata = request.dropbox.metadata(root)
         _walk(request, metadata)
     return {}
@@ -107,7 +123,9 @@ def refresh_files(request):
 def save_tags(request, path, tags):
     if len(tags) > 100:
         tags = tags[:100]
-    f = request.db.query(File).filter_by(ownerid=request.authenticated_userid, path=path).one()
+    f = request.db.query(File).filter_by(
+        ownerid=request.authenticated_userid,
+        path=path).one()
     f.tags = tags
     f.tagged = True
     return request.response
@@ -118,7 +136,7 @@ def save_tags(request, path, tags):
 def mark_tagged(request, path):
     request.db.query(File) \
         .filter_by(ownerid=request.authenticated_userid, path=path) \
-        .update({'tagged':True})
+        .update({'tagged': True})
     return request.response
 
 
@@ -131,6 +149,7 @@ def search(request, query):
     return {
         'files': q.all()
     }
+
 
 @view_config(context=HTTPNotFound, permission=NO_PERMISSION_REQUIRED)
 def handle_404(context, request):

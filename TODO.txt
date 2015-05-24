@@ -1,17 +1,12 @@
+* tour view - select file types & folders before continuing
+* splash
 * db migration tool
 * durable db storage
-* prune todos
-* tour view
-    * select file types & folders before continuing
-* splash
-    * example of use + sign in button
 * call to action in the "recent" page
 * allow search page to collapse recents
 * tree browse view
 * test on mobile
-* way to delete files not in roots (when roots change)
-* animations
-* use a real dropbox app
+* use a production dropbox app
 * add tag(s) to multiple files at a time
 * celery
 * browse page

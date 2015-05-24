@@ -34,25 +34,33 @@ def dropbox_auth_start(request):
     return HTTPFound(location=authorize_url)
 
 
+@view_config(route_name='delete')
+def delete_account(request):
+    request.db.delete(request.user)
+    return logout(request)
+
 @view_config(route_name='dropbox_auth_finish',
              permission=NO_PERMISSION_REQUIRED,
              renderer='onlogin.jinja2')
 def dropbox_auth_finish(request):
-    # TODO handle all of the exception cases
     try:
-        access_token, userid, url_state = \
+        access_token, userid, _ = \
             get_auth_flow(request).finish(request.params)
-    except DropboxOAuth2Flow.BadRequestException as e:
-        return HTTPClientError()
-    except DropboxOAuth2Flow.BadStateException as e:
-        return HTTPFound(location=request.route_url('login'))
-    except DropboxOAuth2Flow.CsrfException as e:
-        return HTTPForbidden()
-    except DropboxOAuth2Flow.NotApprovedException as e:
-        return HTTPFound(location=request.route_url('root'))
-    except DropboxOAuth2Flow.ProviderException as e:
-        LOG.exception("Auth error")
-        return HTTPForbidden()
+    except DropboxOAuth2Flow.BadRequestException:
+        request.response.status_code = 400
+        return {'error': 'Bad request'}
+    except DropboxOAuth2Flow.BadStateException:
+        request.response.status_code = 400
+        return {'error': 'Bad state'}
+    except DropboxOAuth2Flow.CsrfException:
+        request.response.status_code = 403
+        return {'error': 'CSRF check failure'}
+    except DropboxOAuth2Flow.NotApprovedException:
+        request.response.status_code = 400
+        return {'error': 'Not approved'}
+    except DropboxOAuth2Flow.ProviderException:
+        request.response.status_code = 403
+        return {'error': 'Auth error'}
     request.response.headers.extend(remember(request, userid))
     request.session['access_token'] = access_token
     account_info = request.dropbox.account_info()
@@ -61,7 +69,6 @@ def dropbox_auth_finish(request):
     familiar_name = account_info['name_details']['familiar_name']
     user = User(userid, email, display_name, familiar_name)
     request.db.merge(user)
-    # TODO: kick off a file refresh
     return {
         'error': None,
         'user': user,

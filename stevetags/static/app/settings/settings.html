@@ -3,8 +3,10 @@
     <form class="form-horizontal" role="form">
       <!-- BOX NAME -->
       <div class="form-group">
-        <!-- TODO: need an info tooltip -->
-        <label class="control-label col-md-offset-4 col-md-2 col-xs-6">Box name:</label>
+        <label class="control-label col-md-offset-4 col-md-2 col-xs-6">
+          <i class="fa fa-info-circle" tooltip="The prefix for your dropbox urls"></i>
+          Box name:
+        </label>
         <div class="col-md-2 col-xs-6">
           <input class="form-control" type="text" ng-model="USER.settings.box">
         </div>
@@ -21,7 +23,7 @@
       <div class="form-group">
         <label class="control-label col-md-offset-4 col-md-2 col-xs-6">File types:</label>
         <div class="col-md-2 col-xs-6">
-          TODO
+          <div st-filetypes="USER.settings.filetypes"></div>
         </div>
       </div>
 
