@@ -1,6 +1,6 @@
 angular.module('stevetags')
 
-.directive('qbNavbar', ['CONST', (CONST) ->
+.directive('stNavbar', ['CONST', (CONST) ->
   templateUrl: "#{ CONST.URL_PREFIX }/app/navbar/navbar.html"
   restrict: 'A'
   replace: true

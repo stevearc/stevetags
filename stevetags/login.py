@@ -48,19 +48,19 @@ def dropbox_auth_finish(request):
             get_auth_flow(request).finish(request.params)
     except DropboxOAuth2Flow.BadRequestException:
         request.response.status_code = 400
-        return {'error': 'Bad request'}
+        return {'error': 'Bad request', 'user': None}
     except DropboxOAuth2Flow.BadStateException:
         request.response.status_code = 400
-        return {'error': 'Bad state'}
+        return {'error': 'Bad state', 'user': None}
     except DropboxOAuth2Flow.CsrfException:
         request.response.status_code = 403
-        return {'error': 'CSRF check failure'}
+        return {'error': 'CSRF check failure', 'user': None}
     except DropboxOAuth2Flow.NotApprovedException:
         request.response.status_code = 400
-        return {'error': 'Not approved'}
+        return {'error': 'Not approved', 'user': None}
     except DropboxOAuth2Flow.ProviderException:
         request.response.status_code = 403
-        return {'error': 'Auth error'}
+        return {'error': 'Auth error', 'user': None}
     request.response.headers.extend(remember(request, userid))
     request.session['access_token'] = access_token
     account_info = request.dropbox.account_info()

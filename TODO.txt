@@ -1,5 +1,4 @@
-* tour view - select file types & folders before continuing
-* splash
+* dropbox file deletion
 * db migration tool
 * durable db storage
 * call to action in the "recent" page

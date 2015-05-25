@@ -16,8 +16,8 @@
 <body constants="{{ request.client_constants() | json }}">
 
 <div class="container">
-  <div qb-navbar></div>
-  <div qb-toaster></div>
+  <div ng-if="USER.settings.tour_complete" st-navbar></div>
+  <div st-toaster></div>
   <div ng-view></div>
 </div>
 

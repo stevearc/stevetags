@@ -11,28 +11,6 @@ from sqlalchemy.ext.mutable import MutableDict
 Base = declarative_base()  # pylint: disable=C0103
 
 
-def get_serializers(type):
-    noop = lambda x: x
-
-    if type in (int, long):
-        return (int, str)
-    elif type is float:
-        return (float, str)
-    elif type is datetime:
-        return (lambda x: datetime.utcfromtimestamp(int(x)),
-                lambda x: str(calendar.timegm(x.utctimetuple())))
-    elif type is bool:
-        return (lambda x: bool(int(x)),
-                lambda x: str(int(asbool(x))))
-    elif type in (list, dict):
-        return (lambda x: json.loads(x) if isinstance(x, basestring) else x,
-                json.dumps)
-    elif type in (str, unicode, basestring):
-        return (noop, noop)
-    else:
-        raise TypeError("Unrecognized type %r" % type)
-
-
 def set_property(cls, prop):
     if len(prop) == 2 and issubclass(prop[1], DictWrapper):
         name = prop[0]
@@ -57,7 +35,8 @@ def set_property(cls, prop):
         if isinstance(type, (tuple, list)):
             deserialize, serialize = type
         else:
-            deserialize, serialize = get_serializers(type)
+            noop = lambda x: x
+            deserialize, serialize = noop, noop
 
         def getter(self):
             if key in self._data:
@@ -119,6 +98,8 @@ class UserSettings(DictWrapper):
         ('roots', list, ['/']),
         ('filetypes', list, []),
         ('box', str, 'personal'),
+        ('tour_step', int, 1),
+        ('tour_complete', bool, False),
     ]
 
 

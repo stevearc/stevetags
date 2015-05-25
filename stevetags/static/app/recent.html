@@ -1,13 +1,14 @@
-<div>
-  <h3>Recently Added
-    <button ng-click="refresh()" class="btn btn-default btn-sm pull-right"
+<div class="st-recent">
+  <h3>
+    <button ng-click="refresh()" class="btn btn-default btn-sm"
       ng-disabled="refreshing">
       <i class="fa fa-refresh" ng-class="refreshing ? 'fa-spin' : ''"></i>
     </button>
+    Recently Added
   </h3>
-  <div qb-list="files" removable="true" on-remove="maybeFetchMore()"></div>
-  <div ng-if="files.length == 0" class="text-center">
+  <div st-list="files" removable="true" on-remove="maybeFetchMore()"></div>
+  <div ng-if="earnedCookie()" class="text-center">
     <h4>All your files are tagged! Have a cookie.</h4>
-    <img class="img-responsive" alt="" src="http://media.giphy.com/media/whNK1SAMSQjwQ/giphy.gif">
+    <img class="img-responsive" alt="" ng-src="'http://media.giphy.com/media/whNK1SAMSQjwQ/giphy.gif'">
   </div>
 </div>

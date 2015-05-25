@@ -64,18 +64,18 @@ angular.module('stevetags')
   }
 ])
 
-.directive('qbStealth', ->
+.directive('stStealth', ->
   (scope, element, attrs) ->
-    scope.$watch(attrs.qbStealth,
+    scope.$watch(attrs.stStealth,
       (newValue) ->
         value = if newValue then 'hidden' else 'visibile'
         element.css('visibility', value)
       , true)
 )
 
-.directive('qbVisible', ->
+.directive('stVisible', ->
   (scope, element, attrs) ->
-    scope.$watch(attrs.qbVisible,
+    scope.$watch(attrs.stVisible,
       (newValue) ->
         value = if newValue then 'visible' else 'hidden'
         element.css('visibility', value)
@@ -87,9 +87,9 @@ angular.module('stevetags')
 )
 
 # Directive for focusing on an element
-.directive('qbFocus', ['$timeout', ($timeout) ->
+.directive('stFocus', ['$timeout', ($timeout) ->
   (scope, element, attrs) ->
-    scope.$watch(attrs.qbFocus,
+    scope.$watch(attrs.stFocus,
       (newValue) ->
         if newValue
           $timeout(->
@@ -140,7 +140,11 @@ angular.module('stevetags')
 .run(['$rootScope', '$location', 'CONST', ($rootScope, $location, CONST) ->
   $rootScope.$on '$locationChangeStart', ($event, newPath, oldPath) ->
     if CONST.USER?
-      if newPath.slice(-7) == '/splash'
+      if not CONST.USER.settings.tour_complete
+        tour_path = "/tour/#{ CONST.USER.settings.tour_step }"
+        if newPath.slice(-7) != tour_path
+          $location.path(tour_path)
+      else if newPath.slice(-7) == '/splash' or newPath.slice(-7, -1) == '/tour/'
         $location.path('/')
     else
       if newPath.slice(-7) != '/splash'

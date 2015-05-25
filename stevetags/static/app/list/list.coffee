@@ -1,15 +1,16 @@
 angular.module('stevetags')
 
-.directive('qbList', ['$http', '$timeout', 'CONST', ($http, $timeout, CONST) ->
+.directive('stList', ['$http', '$timeout', 'CONST', ($http, $timeout, CONST) ->
   restrict: 'A'
   replace: true
   templateUrl: "#{ CONST.URL_PREFIX }/app/list/list.html"
   scope:
-    files: '=qbList'
+    files: '=stList'
     removable: '='
     onRemove: '&'
   link: (scope, element, attrs) ->
-    scope.box = CONST.USER.settings.box
+    scope.box = CONST.USER?.settings?.box
+    scope.editable = not attrs.readOnly?
 
     scope.saveTags = (file) ->
       params =
@@ -23,6 +24,7 @@ angular.module('stevetags')
         scope.toggleRemove file
 
     scope.editTags = (file) ->
+      return unless scope.editable
       file.$editing = true
 
     scope.toggleRemove = (file) ->

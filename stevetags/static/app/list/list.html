@@ -1,4 +1,4 @@
-<div class="file-list">
+<div class="file-list" ng-class="editable ? '' : 'read-only'">
   <ul class="list-unstyled">
     <li ng-repeat="file in files" class="file" ng-mouseenter="hover = true"
       ng-mouseleave="hover = false" ng-class="file.$removed ? 'removed' : ''">
@@ -8,8 +8,8 @@
       <div class="content">
         <div>
           {{ file.path | basename }}
-          <a ng-href="https://www.dropbox.com/{{ box }}{{ file.path | dirname }}?preview={{ file.path | basename }}"
-            target="_blank" qb-visible="hover">
+          <a ng-if="editable" ng-href="https://www.dropbox.com/{{ box }}{{ file.path | dirname }}?preview={{ file.path | basename }}"
+            target="_blank" st-visible="hover">
             <i class="fa fa-external-link"></i>
           </a>
           <span class="dir">
@@ -19,12 +19,13 @@
         </div>
         <div class="tags">
           <div ng-hide="file.$editing" ng-click="editTags(file)" class="clickable">
+            <i class="fa fa-tag"></i>
             <span ng-if="file.tags.length == 0">Enter tags here</span>
             {{ file.tags }}
           </div>
           <form role="form" class="form-group" ng-if="file.$editing" ng-submit="saveTags(file)">
             <input type="text" placeholder="Enter tags here" class="form-control" maxlength=100
-              ng-model="file.tags" ng-blur="saveTags(file)" qb-focus="file.$editing" />
+              ng-model="file.tags" ng-blur="saveTags(file)" st-focus="file.$editing" />
           </form>
         </div>
       </div>

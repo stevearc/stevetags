@@ -12,19 +12,20 @@ angular.module('stevetags')
 ])
 
 
-.directive('qbRecent', ['$http', 'CONST', ($http, CONST) ->
+.directive('stRecent', ['$http', 'CONST', ($http, CONST) ->
   restrict: 'A'
   replace: true
   templateUrl: "#{ CONST.URL_PREFIX }/app/recent.html"
   scope: {}
   link: (scope, element, attrs) ->
-
     scope.refreshing = false
     scope.files = null
+    scope.hadFilesEver = false
 
     fetchFiles = ->
       $http.get('/files').then (response) ->
         scope.files = response.data.files
+        scope.hadFilesEver = scope.files.length > 0
       return
     fetchFiles()
 
@@ -46,9 +47,12 @@ angular.module('stevetags')
             scope.files.push(file)
           return
       return
+
+    scope.earnedCookie = ->
+      return scope.files? and scope.files.length == 0 and scope.hadFilesEver
 ])
 
-.directive('qbSearch', ['$http', 'CONST', ($http, CONST) ->
+.directive('stSearch', ['$http', 'CONST', ($http, CONST) ->
   restrict: 'A'
   replace: true
   templateUrl: "#{ CONST.URL_PREFIX }/app/search.html"

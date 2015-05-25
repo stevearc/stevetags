@@ -1,0 +1,26 @@
+<div class="row vspace40">
+  <div class="col-xs-12 col-md-offset-3 col-md-6">
+    <div class="text-right">
+      <button ng-show="step < 3" ng-click="nextPage()" class="btn btn-default">
+        Next
+      </button>
+    </div>
+    <div ng-switch on="step">
+      <div ng-switch-when="1">
+        <h3>Select which folders to sync</h3>
+        <div ng-include="URL_PREFIX + '/app/tree/tree.html'"></div>
+      </div>
+      <div ng-switch-when="2">
+        <h3>Select which file types to sync</h3>
+        <div st-filetypes="USER.settings.filetypes"></div>
+      </div>
+      <div ng-switch-when="3" class="text-center">
+        <h3>Saving settings...</h3>
+        <i class="fa fa-4x fa-spinner fa-spin"></i>
+      </div>
+      <div ng-switch-default>
+        Oops...something has gone terribly wrong
+      </div>
+    </div>
+  </div>
+</div>

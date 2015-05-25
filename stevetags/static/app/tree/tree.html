@@ -1,6 +1,6 @@
 <div ng-controller="TreeCtrl" class="tree-node">
   <span class="toggle" ng-click="toggle()"
-    qb-visible="root.children == null || root.children.length > 0">
+    st-visible="root.children == null || root.children.length > 0">
     <i class="fa fa-fw fa-lg" ng-class="root.$expanded ? 'fa-caret-down' : 'fa-caret-right'"></i>
   </span>
   <span class="selector" ng-click="selectToggle()">
