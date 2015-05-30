@@ -1,0 +1,13 @@
+database:
+  image: postgres:9.4.1
+  ports:
+   - "8889:5432"
+  volumes_from:
+    - storage
+  environment:
+    POSTGRES_PASSWORD: 'postgres'
+storage:
+  image: postgres:9.4.1
+  volumes:
+    - /var/lib/postgresql/data
+  command: /bin/bash

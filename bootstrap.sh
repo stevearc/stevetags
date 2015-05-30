@@ -7,7 +7,8 @@ UWSGI_CONFIG="{{ uwsgi.emperor_configs }}"
 
 main() {
   apt-get update -qq
-  apt-get -y install docker.io nginx-full libpq-dev
+  apt-get -y install nginx-full libpq-dev
+  wget -qO- https://get.docker.com/ | sh
   rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
   if [ ! -e "$VENV" ]; then
     mkdir -p "$(dirname $VENV)"

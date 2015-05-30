@@ -1,11 +1,13 @@
 #!/bin/bash -ex
+declare -r DOCKER_COMPOSE_VERSION="1.2.0"
 
 cd $(dirname "$0")
 
 DB_NAME="stevetags-db"
 cleanup() {
   set +e
-  docker rm -f "$DB_NAME"
+  docker-compose stop
+  docker-compose rm -f -v
 }
 trap cleanup SIGINT SIGTERM EXIT
 
@@ -19,6 +21,22 @@ serve() {
 
 main() {
   ./dl-deps.sh
+
+  if [ ! `which docker` ]; then
+    wget -qO- https://get.docker.com/ | sh
+  fi
+  if [ ! `which docker-compose` ]; then
+    local filename=$(mktemp)
+    curl -L https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > $filename
+    chmod +x $filename
+    sudo mv $filename /usr/local/bin/docker-compose
+    local completion=$(mktemp)
+    curl -L https://raw.githubusercontent.com/docker/compose/$DOCKER_COMPOSE_VERSION/contrib/completion/bash/docker-compose > $completion
+    chmod 644 $completion
+    sudo chown root:root $completion
+    sudo mv $completion /etc/bash_completion.d/docker-compose
+  fi
+
   rm -rf stevetags/gen/*
   rm -f stevetags/files.json
   go run build.go -w &
@@ -31,7 +49,7 @@ main() {
   pip install fabric jinja2
   pip install waitress
 
-  docker run --name "$DB_NAME" -e POSTGRES_PASSWORD=postgres -p 8889:5432 -d postgres:9.4.1
+  docker-compose up -d
   sleep 1 # Wait for the DB to come up
   serve &
 

@@ -1,7 +1,7 @@
 * dropbox file deletion
 * db migration tool
-* durable db storage
 * call to action in the "recent" page
+
 * allow search page to collapse recents
 * tree browse view
 * test on mobile
