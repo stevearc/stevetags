@@ -2,9 +2,9 @@
   <ul class="list-unstyled">
     <li ng-repeat="file in files" class="file" ng-mouseenter="hover = true"
       ng-mouseleave="hover = false" ng-class="file.$removed ? 'removed' : ''">
-      <div ng-show="removable" class="check" ng-click="toggleRemove(file)">
+      <a ng-show="removable" class="check" ng-click="toggleRemove(file)">
         <i class="fa fa-lg" ng-class="file.$removed ? 'fa-check-square-o' : 'fa-square-o'"></i>
-      </div>
+      </a>
       <div class="content">
         <div>
           {{ file.path | basename }}

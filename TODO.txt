@@ -1,6 +1,5 @@
 * dropbox file deletion
 * db migration tool
-* call to action in the "recent" page
 
 * allow search page to collapse recents
 * tree browse view

@@ -59,9 +59,11 @@ angular.module('stevetags')
   scope: {}
   link: (scope, element, attrs) ->
     scope.results = []
+    scope.everSearched = false
     scope.search = (searchtext) ->
-      params = query: searchtext
+      params = query: searchtext ? ''
       scope.searching = true
+      scope.everSearched = true
       $http.get('/files/search', params: params).then (response) ->
         scope.searching = false
         scope.results = response.data.files

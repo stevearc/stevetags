@@ -1,13 +1,22 @@
 body {
-  color: #444;
+  color: @gray-dark;
 }
 
 .clickable {
   cursor: pointer;
 }
 
-a[ng-click] {
-  cursor: pointer;
+a {
+  color: @brand-link;
+  &:hover {
+    color: lighten(@brand-link, 10%);
+  }
+  &:active {
+    color: darken(@brand-link, 10%);
+  }
+  &[ng-click] {
+    cursor: pointer;
+  }
 }
 
 .unlink {

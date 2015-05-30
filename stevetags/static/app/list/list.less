@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: row;
     padding: 5px;
-    border-bottom: solid 1px #ddd;
+    border-bottom: solid 1px @gray-lighter;
     opacity: 1;
 
     &.removed {
@@ -12,13 +12,13 @@
     }
 
     &:hover {
-      background: #eee;
+      background: @gray-lightest;
     }
 
     .check {
       flex: 0 1;
       min-width: 30px;
-      color: blue;
+      color: @brand-link;
       cursor: pointer;
       .fa {
         margin-top: 14px;
@@ -36,10 +36,10 @@
         text-decoration: inherit;
       }
       .dir {
-        color: #aaa;
+        color: @gray-light;
       }
       .tags {
-        color: #aaa;
+        color: @gray-light;
       }
     }
   }

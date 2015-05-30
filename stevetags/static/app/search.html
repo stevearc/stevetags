@@ -10,4 +10,7 @@
     </div>
   </form>
   <div st-list="results"></div>
+  <div ng-show="everSearched && !searching && results.length == 0" class="no-results">
+    No results
+  </div>
 </div>
