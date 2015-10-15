@@ -52,7 +52,7 @@ angular.module('stevetags')
       return scope.files? and scope.files.length == 0 and scope.hadFilesEver
 ])
 
-.directive('stSearch', ['$http', 'CONST', ($http, CONST) ->
+.directive('stSearch', ['$http', '$timeout', 'CONST', ($http, $timeout, CONST) ->
   restrict: 'A'
   replace: true
   templateUrl: "#{ CONST.URL_PREFIX }/app/search.html"
@@ -60,7 +60,20 @@ angular.module('stevetags')
   link: (scope, element, attrs) ->
     scope.results = []
     scope.everSearched = false
+
+    timer = null
+    scope.maybeSearch = (e, searchtext) ->
+      # Ignore keyup for enter
+      return if e.keyCode == 13
+      $timeout.cancel(timer) if timer?
+      timer = $timeout ->
+        timer = null
+        scope.search searchtext
+      , 500
+
     scope.search = (searchtext) ->
+      $timeout.cancel(timer) if timer?
+      timer = null
       params = query: searchtext ? ''
       scope.searching = true
       scope.everSearched = true
