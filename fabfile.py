@@ -143,10 +143,9 @@ def deploy():
 
 @task
 @roles('stevetags')
-def migrate_db():
-    """ Perform any necessary DB migrations """
+def reset_db():
+    """ Remove and replace the DB """
     db = CONSTANTS['db']
-    # TODO: Do a real migration instead of losing all data
     fab.sudo("docker rm -f %s || true" % db['container'])
 
     ret = fab.sudo("docker inspect --format=\"{{ .State.Running }}\" %s" %
