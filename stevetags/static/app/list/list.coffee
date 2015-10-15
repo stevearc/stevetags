@@ -20,7 +20,7 @@ angular.module('stevetags')
       file.$editing = false
       $http.post('/files/tags', params).catch ->
         console.error("Error saving tags for #{ file.path }!")
-      if scope.removable
+      if scope.removable and file.tags.trim().length
         scope.toggleRemove file
 
     scope.editTags = (file) ->
