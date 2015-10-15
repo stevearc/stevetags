@@ -8,7 +8,7 @@ from pyramid.httpexceptions import HTTPException, HTTPServerError, HTTPNotFound
 from pyramid.security import NO_PERMISSION_REQUIRED
 from pyramid.settings import asbool
 from pyramid.view import view_config
-from .models import User, File, Directory, User, UserSettings, MIME_TYPES
+from .models import File, Directory, MIME_TYPES
 from sqlalchemy import not_
 
 
@@ -73,7 +73,10 @@ def _walk(request, metadata):
         hash = metadata['hash']
         if f is not None:
             if f.hash == hash:
-                return
+                pass
+                # TODO: allow early return to make refresh faster.
+                # Right now it interferes with the mark-and-sweep.
+                # return
             else:
                 f.hash = hash
         else:
@@ -91,6 +94,7 @@ def _walk(request, metadata):
                         request.user.settings.filetypes)):
                 return
         f = File(request.authenticated_userid, path, modified, mime_type)
+    f.marked = True
     request.db.merge(f)
 
 
@@ -115,6 +119,18 @@ def refresh_files(request):
     for root in request.user.settings.roots:
         metadata = request.dropbox.metadata(root)
         _walk(request, metadata)
+    request.db.query(File) \
+        .filter_by(ownerid=request.authenticated_userid, marked=False) \
+        .delete(synchronize_session=False)
+    request.db.query(Directory) \
+        .filter_by(ownerid=request.authenticated_userid, marked=False) \
+        .delete(synchronize_session=False)
+    request.db.query(File) \
+        .filter_by(ownerid=request.authenticated_userid) \
+        .update({'marked': False}, synchronize_session=False)
+    request.db.query(Directory) \
+        .filter_by(ownerid=request.authenticated_userid) \
+        .update({'marked': False}, synchronize_session=False)
     return {}
 
 

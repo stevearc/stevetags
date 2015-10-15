@@ -169,6 +169,8 @@ class Directory(Base):
     path = Column(Text, primary_key=True)
     ownerid = Column(Text, ForeignKey(User.id, ondelete='cascade'), primary_key=True)
     hash = Column(Text)
+    # Marked for sweeping
+    marked = Column(Boolean, index=True, nullable=False, default=False)
 
     def __init__(self, ownerid, path, hash):
         self.ownerid = ownerid
@@ -205,6 +207,8 @@ class File(Base):
     created = Column(DateTime(timezone=True), index=True, nullable=False, default=func.now())
     modified = Column(DateTime(timezone=True), index=True, nullable=False)
     tagged = Column(Boolean, index=True, nullable=False, default=False)
+    # Marked for sweeping
+    marked = Column(Boolean, index=True, nullable=False, default=False)
     mime_type = Column(Text)
     __table_args__ = (
         Index('search_text_idx', 'search_text', postgresql_using='gin'),
