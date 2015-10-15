@@ -1,4 +1,5 @@
 """ General views """
+from datetime import date, timedelta
 from sqlalchemy import func
 from pyramid_duh import argify
 from dateutil.parser import parse
@@ -157,11 +158,19 @@ def mark_tagged(request, path):
 
 
 @view_config(route_name='search', renderer='json')
-@argify
-def search(request, query):
-    q = request.db.query(File).filter_by(ownerid=request.authenticated_userid) \
-        .filter(File.search_text.op('@@')(func.plainto_tsquery(query))) \
-        .order_by(File.modified.desc()).limit(10)
+@argify(begin=date, end=date)
+def search(request, query, begin=None, end=None):
+    if end is not None:
+        end = end + timedelta(days=1)
+    q = request.db.query(File) \
+        .filter_by(ownerid=request.authenticated_userid)
+    if query.strip():
+        q = q.filter(File.search_text.op('@@')(func.plainto_tsquery(query)))
+    if begin is not None:
+        q = q.filter(File.modified > begin)
+    if end is not None:
+        q = q.filter(File.modified < end)
+    q = q.order_by(File.modified.desc()).limit(10)
     return {
         'files': q.all()
     }

@@ -31,7 +31,7 @@ main() {
     dl http://code.angularjs.org/$ng_version/angular.min.js
     dl http://code.angularjs.org/$ng_version/angular-touch.min.js
     dl http://code.angularjs.org/$ng_version/angular-route.min.js
-    dl https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.min.js
+    dl https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.2.min.js
     dl https://raw.githubusercontent.com/ftlabs/fastclick/3497d2e92ccc8a959c7efb326c0fc437302d5bcf/lib/fastclick.js
     dl https://raw.github.com/BinaryMuse/ngInfiniteScroll/1.0.0/build/ng-infinite-scroll.min.js
 

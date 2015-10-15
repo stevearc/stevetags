@@ -60,21 +60,37 @@ angular.module('stevetags')
   link: (scope, element, attrs) ->
     scope.results = []
     scope.everSearched = false
+    scope.today = new Date()
+    scope.focusSearch = true
+    scope.status =
+      begin: {}
+      end: {}
 
     timer = null
-    scope.maybeSearch = (e, searchtext) ->
-      # Ignore keyup for enter
-      return if e.keyCode == 13
+    deferSearch = (newval, oldval) ->
+      return if newval == oldval
+      scope.focusSearch = true
       $timeout.cancel(timer) if timer?
       timer = $timeout ->
         timer = null
-        scope.search searchtext
+        scope.search scope.searchtext
       , 500
+
+    scope.$watch 'begin', deferSearch
+    scope.$watch 'end', deferSearch
+    scope.$watch 'searchtext', deferSearch
+
+    scope.open = (mode) ->
+      scope.status[mode].opened = true
 
     scope.search = (searchtext) ->
       $timeout.cancel(timer) if timer?
       timer = null
       params = query: searchtext ? ''
+      if scope.begin?
+        params.begin = scope.begin.getTime() / 1000
+      if scope.end?
+        params.end = scope.end.getTime() / 1000
       scope.searching = true
       scope.everSearched = true
       $http.get('/files/search', params: params).then (response) ->

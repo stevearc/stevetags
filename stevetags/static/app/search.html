@@ -5,7 +5,22 @@
         <span class="input-group-addon">
           <i class="fa fa-fw fa-lg" ng-class="searching ? 'fa-spinner fa-spin' : 'fa-search'"></i></span>
         <input class="form-control" type="text" placeholder="Search for files" ng-model="searchtext"
-          st-focus="true" ng-keyup="maybeSearch($event, searchtext)"/>
+          st-focus="focusSearch" ng-blur="focusSearch = false" />
+
+      </div>
+      <div class="advanced-options-toggle">
+        <a ng-click="advanced = !advanced">
+          <i class="fa" ng-class="advanced ? 'fa-caret-down' : 'fa-caret-right'"></i>
+          advanced
+        </a>
+      </div>
+      <div collapse="!advanced" class="advanced-options">
+        <label>Begin</label>
+        <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="begin" is-open="status.begin.opened"
+          max-date="today" ng-focus="open('begin')"/>
+        <label>End</label>
+        <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="end" is-open="status.end.opened"
+          max-date="today" ng-focus="open('end')"/>
       </div>
     </div>
   </form>
