@@ -10,3 +10,11 @@ everything.
 Then you need docker (`sudo apt-get install docker.io && sudo adduser $USER docker`)
 
 Then you ``./serve_forever.sh``
+
+Deploy
+------
+You will need some global npm packages
+
+```
+npm install -g less uglify-js clean-css coffee-script
+```
