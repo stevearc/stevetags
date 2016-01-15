@@ -164,16 +164,20 @@ def reset_db():
 @roles('stevetags')
 def bootstrap():
     """ Bootstrap a new server (Ubuntu 14.04) """
+    db = CONSTANTS['db']
     _render_put('bootstrap.sh', 'bootstrap.sh')
     fab.run("chmod +x bootstrap.sh")
     fab.sudo("./bootstrap.sh")
     fab.run("rm bootstrap.sh")
-    migrate_db()
     _render_put('etc/stevetags.site', '/etc/nginx/sites-available/stevetags',
                 use_sudo=True)
     fab.sudo("service nginx reload")
     _render_put('etc/uwsgi.conf', '/etc/init/uwsgi.conf', use_sudo=True)
     fab.sudo("service uwsgi restart")
+    fab.run('echo %s > PGPASSWORD' % db['password'])
+    fab.run('chmod 600 PGPASSWORD')
+    fab.put('dump.sh')
+    print "Need to set up cronjob to run dump.sh (and add aws credentials)"
 
 
 @task

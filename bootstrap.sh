@@ -27,6 +27,12 @@ main() {
   fi
   mkdir -p $UWSGI_CONFIG
   mkdir -p $(dirname UWSGI_LOG)
+
+  if [ ! -e /envs/aws ]; then
+    virtualenv /envs/aws
+  fi
+  /envs/aws/bin/pip install awscli
+
   echo "BOOTSTRAP COMPLETE"
 }
 
