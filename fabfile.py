@@ -177,7 +177,8 @@ def bootstrap():
     fab.run('echo %s > PGPASSWORD' % db['password'])
     fab.run('chmod 600 PGPASSWORD')
     fab.put('dump.sh')
-    print "Need to set up cronjob to run dump.sh (and add aws credentials)"
+    fab.put('db_backup', '/etc/cron.d/db_backup', use_sudo=True)
+    print "Need to add aws credentials for database backup cronjob"
 
 
 @task
